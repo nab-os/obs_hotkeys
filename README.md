@@ -52,3 +52,6 @@ obs_hotkeys sequence <key_id> [--shift] [--control] [--alt] [--command]
 
 *key_id* is in the form OBS_KEY_<KEY>, ex: OBS_KEY_A for 'a'
 
+
+## Examples
+You can see the [Wiki](https://github.com/nab-os/obs_hotkeys/wiki) for some examples
