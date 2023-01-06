@@ -145,10 +145,6 @@ async fn main() -> Result<()> {
         config.password = password;
     }
 
-    println!(
-        "Connecting to '{}' on port '{}' with password '{}'",
-        config.address, config.port, config.password
-    );
     let client = Client::connect(config.address, config.port, Some(config.password)).await?;
 
     match args.action {
