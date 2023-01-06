@@ -8,6 +8,7 @@ description = "This tool allows you to integrate your OBS setup into a bigger ar
 license = "MIT"
 repository = "https://github.com/nab-os/obs_hotkeys"
 homepage = "https://github.com/nab-os/obs_hotkeys"
+keywords = ["cli", "obs"]
 
 
 
