@@ -9,7 +9,7 @@ use clap::{Args, Parser, Subcommand};
 #[command(
     author = "Nabos",
     version = "1.0",
-    about = "OBS CLI Helper",
+    about = "OBS Hotkeys",
     long_about = "This tool allows you to integrate your OBS setup into a bigger architecture via CLI commands"
 )]
 struct Cli {
