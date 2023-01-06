@@ -1,0 +1,31 @@
+# Maintainer: XXX
+
+pkgname=obs_hotkeys-git
+_pkgname=obs_hotkeys
+pkgver=0.0.0
+pkgrel=1
+pkgdesc='OBS Hotkey trigger tool'
+arch=('x86_64')
+url='https://github.com/nab-os/obs_hotkeys'
+license=('MIT')
+makedepends=('git' 'rust')
+provides=("$_pkgname")
+conflicts=("$_pkgname")
+source=("$_pkgname::git+$url")
+md5sums=('SKIP')
+
+pkgver() {
+  cd "$_pkgname"
+  echo $(grep '^version =' Cargo.toml|head -n1|cut -d\" -f2).r$(git rev-list --count HEAD).g$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd "$_pkgname"
+  cargo build --release
+}
+
+package() {
+  cd "$_pkgname"
+  install -Dm755 "target/release/$_pkgname" "$pkgdir/usr/bin/$_pkgname"
+}
+

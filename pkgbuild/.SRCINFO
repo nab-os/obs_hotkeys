@@ -1,0 +1,16 @@
+pkgbase = obs_hotkeys-git
+	pkgdesc = OBS Hotkey trigger tool
+	pkgver = 0.0.0
+	pkgrel = 1
+	url = https://github.com/nab-os/obs_hotkeys
+	arch = x86_64
+	license = MIT
+	makedepends = git
+	makedepends = rust
+	provides = obs_hotkeys
+	conflicts = obs_hotkeys
+	source = obs_hotkeys::git+https://github.com/nab-os/obs_hotkeys
+	md5sums = SKIP
+
+pkgname = ops_hotkeys-git
+
