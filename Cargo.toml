@@ -1,6 +1,6 @@
 [package]
 name = "obs_hotkeys"
-version = "1.0.1"
+version = "1.0.2"
 edition = "2021"
 authors = ["Nabos <nabos@glargh.fr>"]
 description = "This tool allows you to integrate your OBS setup into a bigger architecture via CLI commands"
