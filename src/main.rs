@@ -4,7 +4,7 @@ use std::{default::Default, path::Path};
 use anyhow::Result;
 use obws::{requests::hotkeys::KeyModifiers, Client};
 
-use clap::{Args, Parser, Subcommand};
+use argh::FromArgs;
 use serde::{Deserialize, Serialize};
 
 //===== Config =====//
@@ -50,38 +50,40 @@ impl From<ConfigFile> for Config {
 
 //===== Arg Parser =====//
 
-#[derive(Parser)]
-#[command(
-    author = "Nabos",
-    version = "1.0",
-    about = "OBS Hotkeys",
-    long_about = "This tool allows you to integrate your OBS setup into a bigger architecture via CLI commands"
+#[derive(FromArgs, PartialEq, Debug)]
+#[argh(
+    description = "This tool allows you to integrate your OBS setup into a bigger architecture via CLI commands"
 )]
 struct Cli {
-    #[clap(subcommand)]
+    #[argh(subcommand)]
     action: Action,
 
     ///YAML Configuration file to load the parameters from
-    #[arg(short, long, default_value = "~/.config/obs_hotkeys/config.yaml")]
+    #[argh(
+        option,
+        short = 'c',
+        default = "String::from(\"~/.config/obs_hotkeys/config.yaml\")"
+    )]
     config_file: String,
 
     ///OBS host address to connect to
-    #[arg(short, long)]
+    #[argh(option, short = 'a')]
     address: Option<String>,
 
     ///OBS host port to connect to
-    #[arg(short, long)]
+    #[argh(option, short = 'p')]
     port: Option<u16>,
 
     ///OBS host password to connect with
-    #[arg(long)]
+    #[argh(option)]
     password: Option<String>,
 }
 
-#[derive(Subcommand, Debug)]
+#[derive(FromArgs, PartialEq, Debug)]
+#[argh(subcommand)]
 enum Action {
     ///List hotkeys registered in OBS
-    List,
+    List(ListAction),
 
     ///Asks OBS to trigger the specified hotkey
     Trigger(TriggerAction),
@@ -90,37 +92,48 @@ enum Action {
     Sequence(SequenceAction),
 }
 
-#[derive(Args, Debug)]
+#[derive(FromArgs, PartialEq, Debug)]
+///List OBS Events
+#[argh(subcommand, name = "list")]
+struct ListAction {}
+
+#[derive(FromArgs, PartialEq, Debug)]
+///Trigger an OBS Event
+#[argh(subcommand, name = "trigger")]
 struct TriggerAction {
     ///OBS hotkey name to trigger
+    #[argh(option)]
     hotkey_name: String,
 }
 
-#[derive(Args, Debug)]
+#[derive(FromArgs, PartialEq, Debug)]
+///Send an OBS Key
+#[argh(subcommand, name = "sequence")]
 struct SequenceAction {
     ///OBS Key ID to send (in the form OBS_KEY_<KEY>, ex: OBS_KEY_A for 'a')
+    #[argh(option)]
     key_id: String,
 
-    ///Shift modifier
-    #[arg(long)]
+    ///shift modifier
+    #[argh(switch)]
     shift: bool,
 
-    ///Control modifier
-    #[arg(long)]
+    ///control modifier
+    #[argh(switch)]
     control: bool,
 
-    ///Alt modifier
-    #[arg(long)]
+    ///alt modifier
+    #[argh(switch)]
     alt: bool,
 
-    ///Command (super) modifier
-    #[arg(long)]
+    ///command (super) modifier
+    #[argh(switch)]
     command: bool,
 }
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    let args = Cli::parse();
+    let args: Cli = argh::from_env();
 
     //Default configuration
     let config_path = shellexpand::tilde(&args.config_file);
@@ -148,7 +161,7 @@ async fn main() -> Result<()> {
     let client = Client::connect(config.address, config.port, Some(config.password)).await?;
 
     match args.action {
-        Action::List => {
+        Action::List(_) => {
             let hotkeys = client.hotkeys().list().await?;
             println!("{:#?}", hotkeys);
         }
