@@ -102,7 +102,7 @@ struct ListAction {}
 #[argh(subcommand, name = "trigger")]
 struct TriggerAction {
     ///OBS hotkey name to trigger
-    #[argh(option)]
+    #[argh(positional)]
     hotkey_name: String,
 }
 
@@ -111,7 +111,7 @@ struct TriggerAction {
 #[argh(subcommand, name = "sequence")]
 struct SequenceAction {
     ///OBS Key ID to send (in the form OBS_KEY_<KEY>, ex: OBS_KEY_A for 'a')
-    #[argh(option)]
+    #[argh(positional)]
     key_id: String,
 
     ///shift modifier
